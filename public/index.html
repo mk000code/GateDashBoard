@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GATE CS/IT Command Center</title>
+<style>
+:root{--bg:#f4f5fb;--card:#fff;--tx:#161a2e;--mu:#6a7090;--bd:#e2e5f2;--ac:#6d4aff;--ac2:#00c2a8;--wa:#ff8a3d;--rd:#ff4d6d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d0f1c;--card:#161a2e;--tx:#eef0ff;--mu:#8d93b8;--bd:#262b47;color-scheme:dark}}
+:root[data-theme=dark]{--bg:#0d0f1c;--card:#161a2e;--tx:#eef0ff;--mu:#8d93b8;--bd:#262b47;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:1100px;margin:auto;padding:16px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:22px;border-radius:20px;color:#fff;background:linear-gradient(120deg,#6d4aff,#00c2a8)}
+header h1{margin:0;font-size:22px}header p{margin:2px 0 0;opacity:.9;font-size:13px}
+.btn{border:0;border-radius:10px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer;background:var(--ac);color:#fff}
+.btn.g{background:transparent;color:var(--tx);border:1px solid var(--bd)}.btn.r{background:var(--rd)}
+nav{display:flex;gap:6px;margin:16px 0;overflow-x:auto}
+nav button{flex:none;border:1px solid var(--bd);background:var(--card);color:var(--mu);border-radius:999px;padding:8px 16px;font:inherit;font-weight:600;cursor:pointer}
+nav button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:18px}
+.card h3{margin:0 0 10px;font-size:14px;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.big{font-size:32px;font-weight:800}.sub{color:var(--mu);font-size:13px}
+.bar{height:8px;background:var(--bd);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .5s}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.sc{margin-bottom:12px}.sc>.hd{display:flex;gap:12px;align-items:center;cursor:pointer;flex-wrap:wrap}
+.sc .nm{font-weight:700;flex:1;min-width:160px}.pill{font-size:12px;padding:3px 9px;border-radius:99px;background:var(--bd);color:var(--mu)}
+.det{display:none;margin-top:14px;border-top:1px solid var(--bd);padding-top:12px}.sc.open .det{display:block}
+.tp{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px dashed var(--bd);flex-wrap:wrap}
+.tp label{flex:1;min-width:150px;display:flex;gap:8px;align-items:center;cursor:pointer}.tp.dn label span{text-decoration:line-through;color:var(--mu)}
+.st{display:inline-flex;align-items:center;gap:6px}.st b{min-width:18px;text-align:center}
+.st button{width:26px;height:26px;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--tx);cursor:pointer;font-size:16px;line-height:1}
+input,select{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:9px 11px;max-width:100%}
+input[type=range]{padding:0;accent-color:var(--ac);width:100%}
+.timer{font:800 clamp(40px,10vw,64px)/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.02em}
+.live{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--rd);margin-right:6px;animation:p 1s infinite}
+@keyframes p{50%{opacity:.2}}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--bd)}th{color:var(--mu);font-size:12px;text-transform:uppercase}
+.tw{overflow-x:auto}.f{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sec{display:none}.sec.on{display:block}
+body::before{content:"";position:fixed;inset:-20%;z-index:-1;background:radial-gradient(40% 40% at 20% 20%,#6d4aff33,transparent),radial-gradient(35% 35% at 80% 30%,#00c2a833,transparent),radial-gradient(40% 40% at 50% 90%,#ff4d6d22,transparent);animation:dr 18s ease-in-out infinite alternate}
+@keyframes dr{to{transform:translate(4%,3%) scale(1.1) rotate(4deg)}}
+header{background-size:200% 200%;animation:gs 8s ease infinite;box-shadow:0 20px 50px -20px #6d4aff99}
+@keyframes gs{50%{background-position:100% 50%}}
+.card{background:color-mix(in srgb,var(--card) 84%,transparent);backdrop-filter:blur(10px);transition:transform .25s,box-shadow .25s,border-color .25s}
+.card:hover{transform:translateY(-4px);box-shadow:0 18px 40px -18px #6d4aff88;border-color:var(--ac)}
+.go .card{animation:up .6s cubic-bezier(.2,.8,.2,1) both}
+.go .grid>.card:nth-child(2){animation-delay:.08s}.go .grid>.card:nth-child(3){animation-delay:.16s}.go .grid>.card:nth-child(4){animation-delay:.24s}.go .grid>.card:nth-child(5){animation-delay:.32s}.go .grid>.card:nth-child(6){animation-delay:.4s}
+@keyframes up{from{opacity:0;transform:translateY(18px) scale(.97)}}
+.bar i{position:relative;overflow:hidden}.bar i::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,#fff6,transparent);animation:sh 2.2s infinite}@keyframes sh{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.btn{transition:transform .15s,box-shadow .2s}.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px -8px var(--ac)}.btn:active{transform:scale(.95)}
+nav button{transition:all .25s}nav button:hover{transform:translateY(-2px);color:var(--tx)}nav button.on{box-shadow:0 8px 20px -8px var(--ac)}
+.tp{transition:background .2s,padding .2s}.tp:hover{background:var(--bg);padding-left:8px;border-radius:8px}
+.sync{font-size:12px;padding:5px 11px;border-radius:99px;background:#ffffff30;color:#fff}
+.live{animation:p 1s infinite,rp 1.5s infinite}@keyframes rp{from{box-shadow:0 0 0 0 var(--rd)}to{box-shadow:0 0 0 10px #0000}}
+.timer{background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.rg{transition:stroke-dasharray 1.3s cubic-bezier(.2,.8,.2,1)}.bar i{transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.pt{position:fixed;width:8px;height:8px;border-radius:2px;pointer-events:none;z-index:99;animation:pf 1s ease-out forwards}
+@keyframes pf{to{transform:translate(var(--x),var(--y)) rotate(540deg);opacity:0}}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ac);color:#fff;padding:10px 18px;border-radius:12px;font-weight:600;animation:up .3s both;z-index:99}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+#au{display:none;position:fixed;inset:0;z-index:50;align-items:center;justify-content:center;background:var(--bg);padding:16px}.ab{width:100%;max-width:380px}.ab form{display:grid;gap:10px;margin:14px 0}.ab h1{margin:0 0 4px;font-size:22px;background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}a{color:var(--ac)}</style></head><body><div id="au"><div class="card ab"><h1>GATE CS/IT Command Center</h1><p class="sub">Sign in to open your personal dashboard</p><form id="af"><input id="an" placeholder="Full name" style="display:none" maxlength="60"><input id="ae1" type="email" placeholder="Email" required><input id="ap" type="password" placeholder="Password (min 8 characters)" required minlength="8"><div id="ae" style="color:var(--rd);font-size:13px"></div><button class="btn" style="width:100%">Continue</button></form><p class="sub"><a href="#" id="am">Create an account</a></p></div></div>
+<div class="w">
+<header><div><h1>GATE CS/IT Command Center</h1><p id="cd"></p></div>
+<div class="row"><span class="sync" id="un"></span><span class="sync" id="sy">Connecting…</span><button class="btn g" style="color:#fff;border-color:#fff8" id="th">Theme</button><button class="btn g" style="color:#fff;border-color:#fff8" id="rs">Reset</button><button class="btn g" style="color:#fff;border-color:#fff8" id="lo">Logout</button></div></header>
+<nav id="nv"></nav><main id="app"></main></div>
+<script>
+const D="Engineering Mathematics:Propositional & First-Order Logic|Sets, Relations & Functions|Graph Theory|Combinatorics|Linear Algebra|Probability|Statistics|Calculus;Digital Logic:Boolean Algebra|K-Maps & Minimization|Combinational Circuits|Sequential Circuits|Number Systems|Floating Point;Computer Organization:Machine Instructions & Addressing|ALU & Data Path|Pipelining & Hazards|Cache Memory|Main & Secondary Memory|I/O Interface;Programming & Data Structures:C Programming|Recursion|Arrays, Stacks & Queues|Linked Lists|Trees & BST|Heaps & Graphs|Hashing;Algorithms:Asymptotic Analysis|Divide & Conquer|Greedy|Dynamic Programming|Graph Algorithms|Sorting & Searching|P, NP & NP-Complete;Theory of Computation:Regular Languages & FA|Context-Free Languages|Pushdown Automata|Turing Machines|Decidability|Closure Properties;Compiler Design:Lexical Analysis|Parsing (LL, LR)|Syntax-Directed Translation|Intermediate Code|Code Optimization|Runtime Environment;Operating Systems:Processes & Threads|CPU Scheduling|Synchronization|Deadlocks|Memory Management|Virtual Memory|File Systems & Disk;Databases:ER Model|Relational Algebra & SQL|Normalization|Transactions & Concurrency|Indexing & B-Trees;Computer Networks:OSI/TCP-IP Layers|Data Link & Flow Control|IP Addressing & Subnetting|Routing|Transport Layer (TCP/UDP)|Application Protocols;General Aptitude:Verbal Ability|Numerical Ability|Data Interpretation|Logical Reasoning";
+const S=D.split(";").map(x=>{const[n,t]=x.split(":");return{n,t:t.split("|")}});
+const K="gate_dash_v1";
+let st={done:{},rev:{},conf:{},fin:{},secs:{},tests:[],tm:null,exam:"2027-02-06",tab:"ov",open:null};
+
+let token=null,tmr=null,user=null;
+try{token=localStorage.getItem(K+"tok")}catch(e){}
+const badge=t=>{const b=$("#sy");if(b)b.textContent=t};
+const api=async(p,o={})=>{const r=await fetch("/api"+p,{...o,headers:{"Content-Type":"application/json",...(token?{Authorization:"Bearer "+token}:{})}});const j=await r.json().catch(()=>({}));if(!r.ok)throw Object.assign(new Error(j.error||"Request failed"),{status:r.status});return j};
+const push=()=>api("/progress",{method:"PUT",body:JSON.stringify({data:st})}).then(()=>badge("\u2601 Saved to MongoDB")).catch(e=>{if(e.status===401)logout();else badge("Sync failed")});
+const save=()=>{st.ts=Date.now();if(!token)return;badge("Saving\u2026");clearTimeout(tmr);tmr=setTimeout(push,700)};
+function logout(){try{localStorage.removeItem(K+"tok")}catch(e){}location.reload()}
+function boom(t){const r=t.getBoundingClientRect();for(let i=0;i<16;i++){const p=document.createElement("i");p.className="pt";p.style.cssText=`left:${r.left+r.width/2}px;top:${r.top+r.height/2}px;background:hsl(${Math.random()*360},85%,60%);--x:${(Math.random()-.5)*160}px;--y:${-Math.random()*120-20}px`;document.body.appendChild(p);setTimeout(()=>p.remove(),1000)}}
+function toast(m){const d=document.createElement("div");d.className="toast";d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),2800)}
+function bars(){document.querySelectorAll(".bar i").forEach(b=>{const w=b.style.width;b.style.width="0";requestAnimationFrame(()=>requestAnimationFrame(()=>b.style.width=w))})}
+function counts(){document.querySelectorAll(".big").forEach(e=>{const m=e.textContent.match(/^([\d.]+)(.*)$/);if(!m)return;const to=+m[1],d=(m[1].split(".")[1]||"").length,t0=performance.now();(function f(t){const p=Math.min((t-t0)/900,1);e.textContent=(to*(1-Math.pow(1-p,3))).toFixed(d)+m[2];if(p<1)requestAnimationFrame(f)})(t0)})}
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const tk=(i,j)=>i+"_"+j;
+const sDone=i=>S[i].t.filter((_,j)=>st.done[tk(i,j)]).length;
+const sPct=i=>Math.round(sDone(i)/S[i].t.length*100);
+const sRev=i=>S[i].t.reduce((a,_,j)=>a+(st.rev[tk(i,j)]||0),0);
+const el=i=>(st.secs[i]||0)+(st.tm&&st.tm.s===i?(Date.now()-st.tm.t)/1000:0);
+const tot=()=>S.reduce((a,_,i)=>a+el(i),0);
+const hms=s=>{s=Math.floor(s);return[Math.floor(s/3600),Math.floor(s%3600/60)%60,s%60].map(v=>String(v).padStart(2,"0")).join(":")};
+const hrs=s=>(s/3600).toFixed(1);
+function calc(){
+ const all=S.reduce((a,x)=>a+x.t.length,0),dn=S.reduce((a,_,i)=>a+sDone(i),0);
+ const comp=dn/all*100;
+ const conf=S.reduce((a,_,i)=>a+(st.conf[i]||0),0)/S.length;
+ const n=st.tests.length,last=st.tests.slice(-5),avg=n?last.reduce((a,t)=>a+t.sc/t.max*100,0)/last.length:0;
+ const tw=Math.min(n/10,1),tp=avg*tw;
+ const fin=Math.round(.4*conf+.2*comp+.4*tp);
+ return{all,dn,comp,conf,n,avg,tw,tp,fin};
+}
+const col=v=>v>=70?"var(--ac2)":v>=40?"var(--wa)":"var(--rd)";
+function ring(v){const r=70,c=2*Math.PI*r;return`<svg viewBox="0 0 180 180" width="170" height="170"><circle cx="90" cy="90" r="${r}" fill="none" stroke="var(--bd)" stroke-width="14"/><circle class="rg" data-t="${c*v/100}" data-c="${c}" cx="90" cy="90" r="${r}" fill="none" stroke="${col(v)}" stroke-width="14" stroke-linecap="round" stroke-dasharray="0 ${c}" transform="rotate(-90 90 90)" style="filter:drop-shadow(0 0 7px ${col(v)})"/><text x="90" y="92" text-anchor="middle" font-size="38" font-weight="800" fill="var(--tx)">${v}%</text><text x="90" y="116" text-anchor="middle" font-size="12" fill="var(--mu)">readiness</text></svg>`}
+function chart(){
+ const t=st.tests;if(t.length<2)return`<p class="sub">Add at least 2 tests to see your score trend.</p>`;
+ const W=600,H=160,p=24,pts=t.map((x,i)=>[p+i*(W-2*p)/(t.length-1),H-p-(x.sc/x.max)*(H-2*p),Math.round(x.sc/x.max*100)]);
+ return`<div class="tw"><svg viewBox="0 0 ${W} ${H}" style="min-width:420px;width:100%"><polyline fill="none" stroke="var(--ac)" stroke-width="3" points="${pts.map(q=>q[0]+","+q[1]).join(" ")}"/>${pts.map(q=>`<circle cx="${q[0]}" cy="${q[1]}" r="4.5" fill="var(--ac2)"/><text x="${q[0]}" y="${q[1]-9}" text-anchor="middle" font-size="11" fill="var(--mu)">${q[2]}</text>`).join("")}</svg></div>`;
+}
+function ov(){
+ const c=calc(),days=Math.ceil((new Date(st.exam)-new Date())/864e5);
+ const msg=c.n<10?`Take ${10-c.n} more mock test(s) to unlock full test weight (${Math.round(c.tw*100)}% now).`:"Test weight fully unlocked. Keep your scores climbing.";
+ return`<div class="grid"><div class="card" style="text-align:center"><h3>Final Confidence</h3>${ring(c.fin)}<div class="sub">40% confidence + 20% syllabus + 40% test performance</div><div class="sub" style="margin-top:6px">${msg}</div></div>
+ <div class="card"><h3>Syllabus Completion</h3><div class="big">${Math.round(c.comp)}%</div><div class="sub">${c.dn} of ${c.all} topics done</div><div class="bar" style="margin-top:10px"><i style="width:${c.comp}%"></i></div></div>
+ <div class="card"><h3>Hours Studied</h3><div class="big" id="ovh">${hrs(tot())}h</div><div class="sub">${st.tm?'<span class="live"></span>Session running':'No active session'}</div></div>
+ <div class="card"><h3>Mock Tests</h3><div class="big">${c.n}</div><div class="sub">Avg of last 5: ${c.avg.toFixed(0)}%</div></div>
+ <div class="card"><h3>Avg Subject Confidence</h3><div class="big">${Math.round(c.conf)}%</div><div class="bar" style="margin-top:10px"><i style="width:${c.conf}%"></i></div></div>
+ <div class="card"><h3>Total Revisions</h3><div class="big">${S.reduce((a,_,i)=>a+sRev(i),0)}</div><div class="sub">${S.reduce((a,_,i)=>a+(st.fin[i]||0),0)} full subject finishes</div></div></div>
+ <div class="card" style="margin-top:14px"><div class="row"><h3>Exam date</h3><input type="date" id="ex" value="${st.exam}"></div><div class="sub">${days>0?days+" days to go":"Exam day has arrived. All the best!"}</div></div>
+ <div class="card" style="margin-top:14px"><h3>Subject Snapshot</h3>${S.map((x,i)=>`<div style="margin:10px 0"><div class="row"><span>${esc(x.n)}</span><span class="sub">${sPct(i)}% done · ${st.conf[i]||0}% confident</span></div><div class="bar"><i style="width:${sPct(i)}%"></i></div></div>`).join("")}</div>
+ <div class="card" style="margin-top:14px"><h3>Score Trend</h3>${chart()}</div>`;
+}
+function subj(){
+ return S.map((x,i)=>{const p=sPct(i),cf=st.conf[i]||0;
+ return`<div class="card sc ${st.open===i?"open":""}"><div class="hd" data-o="${i}"><div class="nm">${esc(x.n)}<div class="bar" style="margin-top:6px"><i style="width:${p}%"></i></div></div><span class="pill">${p}% · ${sDone(i)}/${x.t.length}</span><span class="pill">${hrs(el(i))}h</span><span class="pill" style="color:${col(cf)}">conf ${cf}%</span></div>
+ <div class="det"><div class="f"><div style="flex:1;min-width:220px"><div class="sub">Confidence: <b>${cf}%</b></div><input type="range" min="0" max="100" value="${cf}" data-cf="${i}"></div>
+ <div class="st">Subject finished <button data-fm="${i}">−</button><b>${st.fin[i]||0}</b>x<button data-fp="${i}">+</button></div></div>
+ ${x.t.map((t,j)=>{const k=tk(i,j);return`<div class="tp ${st.done[k]?"dn":""}"><label><input type="checkbox" data-d="${k}" ${st.done[k]?"checked":""}><span>${esc(t)}</span></label><span class="st">Revised <button data-rm="${k}">−</button><b>${st.rev[k]||0}</b>x<button data-rp="${k}">+</button></span></div>`}).join("")}</div></div>`}).join("");
+}
+function tim(){
+ const a=st.tm;
+ return`<div class="card" style="text-align:center"><h3>Live Study Timer</h3><div class="timer" id="tt">${a?hms((Date.now()-a.t)/1000):"00:00:00"}</div>
+ <div class="f" style="justify-content:center;margin-top:16px"><select id="ts" ${a?"disabled":""}>${S.map((x,i)=>`<option value="${i}" ${a&&a.s===i?"selected":""}>${esc(x.n)}</option>`).join("")}</select>
+ ${a?'<button class="btn r" id="tb">Stop and save</button>':'<button class="btn" id="tb">Start session</button>'}</div>${a?'<div class="sub"><span class="live"></span>Recording. The timer keeps counting even if you close this tab.</div>':""}</div>
+ <div class="card" style="margin-top:14px"><h3>Hours by subject · total <span id="th2">${hrs(tot())}</span>h</h3>${S.map((x,i)=>{const m=Math.max(...S.map((_,k)=>el(k)),1);return`<div style="margin:9px 0"><div class="row"><span>${esc(x.n)}</span><span class="sub">${hrs(el(i))}h</span></div><div class="bar"><i style="width:${el(i)/m*100}%"></i></div></div>`}).join("")}</div>`;
+}
+function tst(){
+ const n=st.tests.length,best=n?Math.max(...st.tests.map(t=>t.sc/t.max*100)):0;
+ return`<div class="card"><h3>Log a mock test</h3><div class="f"><input id="tn" placeholder="Test name" style="flex:2;min-width:150px"><input id="ts1" type="number" step="0.01" placeholder="Score" style="width:100px"><input id="tm1" type="number" placeholder="Out of" value="100" style="width:100px"><input id="td" type="date" value="${new Date().toISOString().slice(0,10)}"><button class="btn" id="ta">Add test</button></div><div class="sub">${n} tests · best ${best.toFixed(0)}%</div></div>
+ <div class="card" style="margin-top:14px"><h3>Score trend</h3>${chart()}</div>
+ <div class="card tw" style="margin-top:14px"><h3>History</h3><table><tr><th>Test</th><th>Date</th><th>Score</th><th>%</th><th></th></tr>${st.tests.map((t,i)=>{const p=Math.round(t.sc/t.max*100);return`<tr><td>${esc(t.n)}</td><td>${esc(t.d)}</td><td>${t.sc}/${t.max}</td><td style="color:${col(p)};font-weight:700">${p}%</td><td><button class="btn g" data-dt="${i}">Delete</button></td></tr>`}).reverse().join("")||'<tr><td colspan="5" class="sub">No tests yet.</td></tr>'}</table></div>`;
+}
+const TABS=[["ov","Overview",ov],["sj","Subjects & Topics",subj],["tm","Study Timer",tim],["ts","Mock Tests",tst]];
+function render(an){
+ $("#nv").innerHTML=TABS.map(t=>`<button class="${st.tab===t[0]?"on":""}" data-t="${t[0]}">${t[1]}</button>`).join("");
+ $("#app").innerHTML=TABS.find(t=>t[0]===st.tab)[2]();
+ $("#app").className=an?"go":"";
+ requestAnimationFrame(()=>document.querySelectorAll(".rg").forEach(e=>e.setAttribute("stroke-dasharray",e.dataset.t+" "+e.dataset.c)));
+ if(an){bars();counts()}
+ const d=Math.ceil((new Date(st.exam)-new Date())/864e5);
+ $("#cd").textContent=d>0?`${d} days to GATE · stay consistent`:"Plan. Study. Revise. Repeat.";
+ save();
+}
+document.addEventListener("click",e=>{
+ const g=a=>e.target.closest("["+a+"]"),v=(a)=>g(a)&&g(a).getAttribute(a);
+ if(v("data-t")){st.tab=v("data-t");return render(1)}
+ if(g("data-o")){const i=+v("data-o");st.open=st.open===i?null:i;return render()}
+ if(g("data-rp")){const k=v("data-rp");st.rev[k]=(st.rev[k]||0)+1;return render()}
+ if(g("data-rm")){const k=v("data-rm");st.rev[k]=Math.max(0,(st.rev[k]||0)-1);return render()}
+ if(g("data-fp")){const i=v("data-fp");st.fin[i]=(st.fin[i]||0)+1;return render()}
+ if(g("data-fm")){const i=v("data-fm");st.fin[i]=Math.max(0,(st.fin[i]||0)-1);return render()}
+ if(g("data-dt")){st.tests.splice(+v("data-dt"),1);return render()}
+ if(e.target.id==="tb"){
+  if(st.tm){st.secs[st.tm.s]=(st.secs[st.tm.s]||0)+(Date.now()-st.tm.t)/1000;st.tm=null}
+  else st.tm={s:+$("#ts").value,t:Date.now()};
+  return render()}
+ if(e.target.id==="ta"){
+  const n=$("#tn").value.trim()||"Mock Test "+(st.tests.length+1),sc=parseFloat($("#ts1").value),mx=parseFloat($("#tm1").value)||100;
+  if(isNaN(sc)){$("#ts1").focus();return}
+  st.tests.push({n,sc,max:mx,d:$("#td").value});return render()}
+ if(e.target.id==="th"){const r=document.documentElement,dk=getComputedStyle(r).getPropertyValue("--bg").trim()==="#0d0f1c";r.dataset.theme=dk?"light":"dark";try{localStorage.setItem(K+"t",r.dataset.theme)}catch(x){}}
+ if(e.target.id==="rs"&&confirm("Erase all your progress data?")){st={done:{},rev:{},conf:{},fin:{},secs:{},tests:[],tm:null,exam:st.exam,tab:"ov",open:null};render()}
+});
+document.addEventListener("change",e=>{
+ const t=e.target;
+ if(t.dataset.d){st.done[t.dataset.d]=t.checked;if(t.checked){boom(t);const i=+t.dataset.d.split("_")[0];if(sPct(i)===100)toast("🎉 "+S[i].n+" completed!")}return render()}
+ if(t.id==="ex"){st.exam=t.value;render()}
+});
+document.addEventListener("input",e=>{
+ const t=e.target;if(t.dataset.cf!==undefined){st.conf[t.dataset.cf]=+t.value;save();const s=t.parentElement.querySelector("b");s.textContent=t.value+"%"}
+});
+document.addEventListener("change",e=>{if(e.target.dataset.cf!==undefined)render()});
+try{const th=localStorage.getItem(K+"t");if(th)document.documentElement.dataset.theme=th}catch(e){}
+setInterval(()=>{
+ if(!st.tm)return;
+ const a=$("#tt");if(a)a.textContent=hms((Date.now()-st.tm.t)/1000);
+ const b=$("#th2");if(b)b.textContent=hrs(tot());
+ const c=$("#ovh");if(c)c.textContent=hrs(tot())+"h";
+},1000);
+let mode="login";
+const au=$("#au");
+async function boot(){
+ if(!token){au.style.display="flex";return}
+ try{const[u,p]=await Promise.all([api("/me"),api("/progress")]);user=u.user;if(p.data)st=Object.assign(st,p.data);au.style.display="none";$("#un").textContent=user.name;render(1);badge("\u2601 Synced")}
+ catch(e){token=null;au.style.display="flex"}
+}
+$("#am").onclick=e=>{e.preventDefault();mode=mode==="login"?"register":"login";$("#an").style.display=mode==="register"?"":"none";$("#an").required=mode==="register";$("#am").textContent=mode==="login"?"Create an account":"I already have an account"};
+$("#lo").onclick=logout;
+$("#af").onsubmit=async e=>{e.preventDefault();$("#ae").textContent="";
+ try{const b={email:$("#ae1").value,password:$("#ap").value};if(mode==="register")b.name=$("#an").value;
+  const j=await api("/"+mode,{method:"POST",body:JSON.stringify(b)});token=j.token;try{localStorage.setItem(K+"tok",token)}catch(x){}boot()}
+ catch(er){$("#ae").textContent=er.message}};
+boot();
+</script></body></html>
