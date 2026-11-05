@@ -87,8 +87,22 @@ router.post("/forgot-password", authLimit, wrap(async (req, res) => {
   const user = await User.findOne({ email: email.toLowerCase() });
   if (!user) return res.json({ ok: true });
   const resetToken = makeToken();
-  user.passwordResetTokenHash = tokenHash(resetToken);
-  user.passwordResetExpiresAt = new Date(Date.now() + 60 * 60 * 1000);
+  const now = new Date();
+  const resetTokens = (user.passwordResetTokens || [])
+    .filter(token => token.expiresAt > now);
+  if (user.passwordResetTokenHash && user.passwordResetExpiresAt > now) {
+    resetTokens.push({
+      tokenHash: user.passwordResetTokenHash,
+      expiresAt: user.passwordResetExpiresAt
+    });
+  }
+  resetTokens.push({
+    tokenHash: tokenHash(resetToken),
+    expiresAt: new Date(now.getTime() + 60 * 60 * 1000)
+  });
+  user.passwordResetTokens = resetTokens.slice(-5);
+  user.passwordResetTokenHash = undefined;
+  user.passwordResetExpiresAt = undefined;
   await user.save();
   try {
     await sendLink(user.email, "Reset your GATE Command Center password", "Reset your password", `${appUrl}/?reset=${resetToken}`);
@@ -102,14 +116,29 @@ router.post("/forgot-password", authLimit, wrap(async (req, res) => {
 router.post("/reset-password", authLimit, wrap(async (req, res) => {
   const { token, password } = req.body || {};
   if (!isStr(token, 200) || !isStr(password, 100) || password.length < 8) return res.status(400).json({ error: "Use a valid reset link and a password of at least 8 characters" });
+  const now = new Date();
+  const hashedToken = tokenHash(token);
   const user = await User.findOne({
-    passwordResetTokenHash: tokenHash(token),
-    passwordResetExpiresAt: { $gt: new Date() }
+    $or: [
+      {
+        passwordResetTokenHash: hashedToken,
+        passwordResetExpiresAt: { $gt: now }
+      },
+      {
+        passwordResetTokens: {
+          $elemMatch: {
+            tokenHash: hashedToken,
+            expiresAt: { $gt: now }
+          }
+        }
+      }
+    ]
   });
   if (!user) return res.status(400).json({ error: "Invalid or expired password reset link" });
   user.passwordHash = await bcrypt.hash(password, 12);
   user.passwordResetTokenHash = undefined;
   user.passwordResetExpiresAt = undefined;
+  user.passwordResetTokens = [];
   await user.save();
   res.json({ ok: true });
 }));
