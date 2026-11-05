@@ -203,6 +203,8 @@ function setMode(next,message=""){
 }
 async function boot(){
  const params=new URLSearchParams(location.search);
+ const queryResetToken=params.get("reset");
+ if(queryResetToken){resetToken=queryResetToken;try{sessionStorage.setItem(K+"reset",resetToken)}catch(x){}}
  if(params.has("verify")){
   const verificationToken=params.get("verify");history.replaceState(null,"",location.pathname);
   try{await api("/verify-email",{method:"POST",body:JSON.stringify({token:verificationToken})});setMode("login","Email verified. You can now sign in.");}
@@ -210,7 +212,11 @@ async function boot(){
   au.style.display="flex";return;
  }
  if(params.has("reset")){
-  resetToken=params.get("reset");history.replaceState(null,"",location.pathname);setMode("reset");au.style.display="flex";return;
+  history.replaceState(null,"",location.pathname);
+ }
+ if(!resetToken){try{resetToken=sessionStorage.getItem(K+"reset")}catch(x){}}
+ if(resetToken){
+  setMode("reset");au.style.display="flex";return;
  }
  if(!token){au.style.display="flex";return}
  try{const[u,p]=await Promise.all([api("/me"),api("/progress")]);user=u.user;if(p.data)st=Object.assign(st,p.data);au.style.display="none";$("#un").textContent=user.name;render(1);badge("\u2601 Synced")}
@@ -236,7 +242,7 @@ $("#af").onsubmit=async e=>{e.preventDefault();$("#ae").textContent="";
   }
   if(mode==="reset"){
    await api("/reset-password",{method:"POST",body:JSON.stringify({token:resetToken,password:$("#ap").value})});
-   resetToken=null;setMode("login","Password updated. Sign in with your new password.");return;
+   resetToken=null;try{sessionStorage.removeItem(K+"reset")}catch(x){}setMode("login","Password updated. Sign in with your new password.");return;
   }
   const j=await api("/login",{method:"POST",body:JSON.stringify({email:$("#ae1").value,password:$("#ap").value})});
   token=j.token;try{localStorage.setItem(K+"tok",token)}catch(x){}await boot();

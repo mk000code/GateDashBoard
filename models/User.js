@@ -8,5 +8,6 @@ module.exports = mongoose.model("User", new mongoose.Schema({
   emailVerificationTokenHash: String,
   emailVerificationExpiresAt: Date,
   passwordResetTokenHash: String,
-  passwordResetExpiresAt: Date
+  passwordResetExpiresAt: Date,
+  passwordResetTokens: [{ tokenHash: String, expiresAt: Date }]
 }, { timestamps: true }));
